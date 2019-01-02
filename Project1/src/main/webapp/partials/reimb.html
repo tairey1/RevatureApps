@@ -1,0 +1,61 @@
+<div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" id="homeNav" href="#">Employee</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav">
+      <a class="nav-item nav-link" id="fileReimbNav">File a Reimbursement</a>
+      <a class="nav-item nav-link" id="viewPastNav">View Past Reimbursement Requests</a>
+      <a class="nav-item nav-link" id="logOut">Log Out</a>
+    </div>
+  </div>
+</nav>
+</div>
+
+<div class="mx-auto" style="width: 800px">
+<br>
+<br>
+<div class="container jumbotron bg-white">
+  <div class="panel panel-default">
+    <div class="panel-body">
+<h3 class="text-center">File A New Reimbursement</h3>
+
+<hr>
+
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text">Amount: $</span>
+  </div>
+  <input type="text" id ="Amount" class="form-control" aria-label="Amount (to the nearest dollar)">
+</div>
+
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <label class="input-group-text" for="inputGroupSelect01">Reason: </label>
+  </div>
+  <select class="custom-select" id="reimbType">
+    <option selected>Choose...</option>
+    <option value="1">Lodging</option>
+    <option value="2">Travel</option>
+    <option value="3">Food</option>
+  </select>
+</div>
+
+<div class="input-group">
+  <div class="input-group-prepend">
+    <span class="input-group-text">Description</span>
+  </div>
+  <textarea class="form-control" aria-label="With textarea" id = "Desc"></textarea>
+</div>
+
+<div>
+	<br>
+	<button type="button" id="submit" class="btn btn-success">Submit</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
