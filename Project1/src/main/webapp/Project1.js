@@ -29,7 +29,6 @@ function login() {
 		username: username,
 		password: password
 	}
-	console.log(obj);
     xhr.onreadystatechange = function(){
         if(xhr.readyState == 4 && xhr.status == 200){
         	var user = JSON.parse(xhr.responseText);
@@ -37,9 +36,11 @@ function login() {
      			loadErrorView();
        		}
        		else if (user.roleID == 1) {
+       			loadEmpNav();
        			loadEmpView();
        		}
        		else {
+       			loadManNav();
         		loadManView();
         	}
         }
@@ -67,6 +68,7 @@ function loadErrorView() {
 }
 
 function logout() {
+	removeNavbar();
 	var xhr = new XMLHttpRequest();
 	
 	xhr.onreadystatechange = function() {
@@ -75,6 +77,57 @@ function logout() {
 		}
 	}
 	xhr.open("GET", "logout", true);
+	xhr.send();
+}
+
+/*
+ * ###########################################
+ * LOAD NAVBAR
+ * ###########################################
+ */
+function loadEmpNav() {
+	var xhr = new XMLHttpRequest();
+	
+	xhr.onreadystatechange = function() {
+		if(xhr.readyState == 4 && xhr.status == 200) {
+			//do things w/ response
+			$('#nav').html(xhr.responseText);
+			$('#fileReimbNav').on('click',loadFileReimbView);
+			$('#viewPastNav').on('click',loadPastView);
+			$('#logOut').on('click',logout);
+		}
+	}
+	xhr.open("GET", "empnav.view", true);
+	xhr.send();
+	
+}
+
+function loadManNav() {
+	var xhr = new XMLHttpRequest();
+	
+	xhr.onreadystatechange = function() {
+		if(xhr.readyState == 4 && xhr.status == 200) {
+			//do things w/ response
+			$('#nav').html(xhr.responseText);
+			$('#pendingNav').on('click',loadPendingView);
+			$('#oldNav').on('click',loadOldView)
+			$('#logoutNav').on('click',logout);
+		}
+	}
+	xhr.open("GET", "mannav.view", true);
+	xhr.send();
+}
+
+function removeNavbar() {
+	var xhr = new XMLHttpRequest();
+	
+	xhr.onreadystatechange = function() {
+		if(xhr.readyState == 4 && xhr.status == 200) {
+			//do things w/ response
+			$('#nav').html(xhr.responseText);
+		}
+	}
+	xhr.open("GET", "emptynav.view", true);
 	xhr.send();
 }
 
@@ -114,14 +167,12 @@ function register () {
 		firstName: firstName,
 		lastName: lastName
 	}
-	console.log(obj);
     xhr.onreadystatechange = function(){
         if(xhr.readyState == 4 && xhr.status == 200){
         	loadLoginView();
         }
     }
     var toSend = JSON.stringify(obj);
-    console.log(toSend)
     xhr.open("POST","register");
     xhr.setRequestHeader("Content-type","application/json");
     xhr.send(toSend);
@@ -139,9 +190,6 @@ function loadManView() {
 		if(xhr.readyState == 4 && xhr.status == 200) {
 			//do things w/ response
 			$('#view').html(xhr.responseText);
-			$('#pendingNav').on('click',loadPendingView);
-			$('#oldNav').on('click',loadOldView)
-			$('#logoutNav').on('click',logout);
 		}
 	}
 	xhr.open("GET", "manager.view", true);
@@ -155,9 +203,6 @@ function loadPendingView() {
 		if (xhr.readyState == 4 && xhr.status == 200) {
 			// do things w/ response
 			$('#view').html(xhr.responseText);
-			$('#homeNav').on('click',loadManView);
-			$('#oldNav').on('click',loadOldView);
-			$('#logoutNav').on('click',logout);
 			loadPendingReimbs();
 		}
 	}
@@ -170,7 +215,6 @@ function loadPendingReimbs(){
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function() {
 		if(xhr.readyState == 4 && xhr.status == 200) {
-			console.log(xhr.responseText);
 			let reimbs = JSON.parse(xhr.responseText);
 			for (let r of reimbs) {
 				let ts = new Date(r.submitted);
@@ -221,7 +265,6 @@ function denyReimb() {
 		status: 3
 	}
     xhr.onreadystatechange = function(){
-        console.log(xhr.readyState)
         if(xhr.readyState == 4 && xhr.status == 200){
         	$('#view').html(xhr.responseText);
         	loadPendingView();
@@ -235,14 +278,10 @@ function denyReimb() {
 
 function loadOldView() {
 	var xhr = new XMLHttpRequest();
-	console.log("hello");
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState == 4 && xhr.status == 200) {
 			// do things w/ response
 			$('#view').html(xhr.responseText);
-			$('#homeNav').on('click',loadManView);
-			$('#pendingNav').on('click',loadPendingView);
-			$('#logoutNav').on('click',logout);
 			loadOldReimbs();
 		}
 	}
@@ -255,7 +294,6 @@ function loadOldReimbs(){
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function() {
 		if(xhr.readyState == 4 && xhr.status == 200) {
-			console.log(xhr.responseText);
 			let reimbs = JSON.parse(xhr.responseText);
 			for (let r of reimbs) {
 				let ts = new Date(r.submitted);
@@ -305,9 +343,6 @@ function loadEmpView() {
 		if(xhr.readyState == 4 && xhr.status == 200) {
 			//do things w/ response
 			$('#view').html(xhr.responseText);
-			$('#fileReimbNav').on('click',loadFileReimbView);
-			$('#viewPastNav').on('click',loadPastView);
-			$('#logOut').on('click',logout);
 		}
 	}
 	xhr.open("GET", "employee.view", true);
@@ -321,9 +356,6 @@ function loadFileReimbView() {
 		if (xhr.readyState == 4 && xhr.status == 200) {
 			// do things w/ response
 			$('#view').html(xhr.responseText);
-			$('#homeNav').on('click',loadEmpView);
-			$('#viewPastNav').on('click',loadPastView);
-			$('#logOut').on('click',logout);
 			$('#submit').on('click',addReimb);
 		}
 	}
@@ -333,13 +365,9 @@ function loadFileReimbView() {
 }
 
 function addReimb() {
-	console.log('adding reimbursement');
 	var amount = $('#Amount').val();
 	var type = $('#reimbType').val();
 	var description = $('#Desc').val();
-	console.log(amount);
-	console.log(type);
-	console.log(description);
 	if (type=="Lodging") {
 		var type_id=1;
 	}
@@ -360,7 +388,6 @@ function addReimb() {
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState == 4) {
-			console.log(xhr.status);
 			loadFileReimbView();
 		}
 	}
@@ -377,9 +404,6 @@ function loadPastView() {
 		if (xhr.readyState == 4 && xhr.status == 200) {
 			// do things w/ response
 			$('#view').html(xhr.responseText);
-			$('#homeNav').on('click',loadEmpView);
-			$('#fileReimbNav').on('click',loadFileReimbView);
-			$('#logOut').on('click',logout);
 			loadReimbs();
 		}
 	}
@@ -393,7 +417,6 @@ function loadReimbs(){
 	
 	xhr.onreadystatechange = function() {
 		if(xhr.readyState == 4 && xhr.status == 200) {
-			console.log(xhr.responseText);
 			let reimbs = JSON.parse(xhr.responseText);
 			for (let r of reimbs) {
 				let ts = new Date(r.submitted);

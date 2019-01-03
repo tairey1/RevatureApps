@@ -48,6 +48,12 @@ public class LoadViewsServlet extends HttpServlet {
 			return "old";
 		case "/Project1/register.view" :
 			return "register";
+		case "/Project1/empnav.view" :
+			return "empnav";
+		case "/Project1/mannav.view" :
+			return "mannav";
+		case "/Project1/emptynav.view" :
+			return "emptynav";
 		}
 		return null;
 	}
